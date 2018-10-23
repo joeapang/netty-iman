@@ -1,10 +1,9 @@
-package com.joe.netty.echo;/**
+package com.joe.netty.chapter6;/**
  * @author joe
  * @date 2018/10/19/019
  */
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;

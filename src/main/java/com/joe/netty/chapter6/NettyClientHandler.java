@@ -1,15 +1,12 @@
-package com.joe.netty.echo;/**
+package com.joe.netty.chapter6;/**
  * @author joe
  * @date 2018/10/19/019
  */
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.CharsetUtil;
 
 import java.nio.charset.Charset;
 

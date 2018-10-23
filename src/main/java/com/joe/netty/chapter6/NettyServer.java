@@ -1,4 +1,4 @@
-package com.joe.netty.echo;/**
+package com.joe.netty.chapter6;/**
  * @author joe
  * @date 2018/10/19/019
  */
@@ -11,8 +11,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-
-import java.net.InetSocketAddress;
 
 /**
  * @author joe
