@@ -1,9 +1,12 @@
-package com.joe.netty.protocol.command;/**
+package com.joe.netty.packet;/**
  * @author joe
  * @date 2018/10/23/023
  */
 
+import com.joe.netty.packet.BasePacket;
+import com.joe.netty.protocol.command.Command;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author joe
@@ -11,8 +14,9 @@ import lombok.Data;
  * @date 2018/10/23/023
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class LoginRequestPacket extends BasePacket {
-    private Integer userId;
+    private String userId;
     private String username;
     private String password;
 

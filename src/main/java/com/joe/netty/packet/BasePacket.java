@@ -1,4 +1,4 @@
-package com.joe.netty.protocol.command;/**
+package com.joe.netty.packet;/**
  * @author joe
  * @date 2018/10/23/023
  */

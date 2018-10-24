@@ -3,6 +3,9 @@ package com.joe.netty.protocol.command;/**
  * @date 2018/10/23/023
  */
 
+import com.joe.netty.packet.BasePacket;
+import com.joe.netty.packet.LoginRequestPacket;
+import com.joe.netty.packet.LoginResponsePacket;
 import com.joe.netty.serializer.Serializer;
 import com.joe.netty.serializer.impl.JsonSerializer;
 import io.netty.buffer.ByteBuf;
@@ -18,13 +21,15 @@ import java.util.Map;
  */
 public class PacketCodeC {
     private static final int MAGIC_NUMBER = 0x12345678;
+    public static final PacketCodeC INSTANCE = new PacketCodeC();
 
-    private static final Map<Byte,Class<? extends BasePacket>> packetTypeMap;
-    private static final Map<Byte, Serializer> serializerMap;
+    private final Map<Byte,Class<? extends BasePacket>> packetTypeMap;
+    private final Map<Byte, Serializer> serializerMap;
 
-    static {
+    private PacketCodeC() {
         packetTypeMap=new HashMap<>();
-        packetTypeMap.put(Command.LOGIN_REQUEST,LoginRequestPacket.class);
+        packetTypeMap.put(Command.LOGIN_REQUEST, LoginRequestPacket.class);
+        packetTypeMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
         serializerMap=new HashMap<>();
         Serializer serializer=new JsonSerializer();
         serializerMap.put(serializer.getSerializerAlgorithm(),serializer );
@@ -33,10 +38,11 @@ public class PacketCodeC {
      * 对数据进行编码
      *
      * @param packet 传递的java对象
+     * @param allocator ByteBuf 分配器
      * @return
      */
-    public ByteBuf encode(BasePacket packet) {
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+    public  ByteBuf encode(ByteBufAllocator allocator,BasePacket packet) {
+        ByteBuf byteBuf =allocator.ioBuffer();
         //序列化对象
         byte[] bytes = Serializer.DEFAULT.serializer(packet);
         /**
@@ -52,7 +58,7 @@ public class PacketCodeC {
         return byteBuf;
     }
 
-    public BasePacket decode(ByteBuf byteBuf) {
+    public  BasePacket decode(ByteBuf byteBuf) {
         //跳过前四字节的魔数字
         byteBuf.skipBytes(4);
         //跳过版本号
