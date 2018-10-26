@@ -3,8 +3,10 @@ package com.joe.netty.server;/**
  * @date 2018/10/24/024
  */
 
-import com.joe.netty.handler.NettyServerHandler;
-import io.netty.bootstrap.Bootstrap;
+import com.joe.netty.server.handler.LoginRequestHandler;
+import com.joe.netty.server.handler.MessageRequestHandler;
+import com.joe.netty.util.PacketDecoder;
+import com.joe.netty.util.PacketEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -47,7 +49,8 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new NettyServerHandler());
+                        ch.pipeline().addLast(new PacketDecoder()).addLast(new LoginRequestHandler())
+                                .addLast(new MessageRequestHandler()).addLast(new PacketEncoder());
                     }
                 });
         bind(bootstrap, PORT);

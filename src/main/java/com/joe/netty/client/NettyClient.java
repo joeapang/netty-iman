@@ -3,15 +3,21 @@ package com.joe.netty.client;/**
  * @date 2018/10/24/024
  */
 
-import com.joe.netty.handler.NettyClientHandler;
+import com.joe.netty.client.handler.LoginResponseHandler;
+import com.joe.netty.client.handler.MessageResponseHandler;
+import com.joe.netty.packet.MessageRequestPacket;
+import com.joe.netty.protocol.command.PacketCodeC;
+import com.joe.netty.util.LoginUtils;
+import com.joe.netty.util.PacketDecoder;
+import com.joe.netty.util.PacketEncoder;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.util.Date;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,11 +59,12 @@ public class NettyClient {
                 .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
-                    protected void initChannel(NioSocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new NettyClientHandler());
+                    protected void initChannel(NioSocketChannel ch) {
+                        ch.pipeline().addLast(new PacketDecoder()).addLast(new LoginResponseHandler())
+                                .addLast(new MessageResponseHandler()).addLast(new PacketEncoder());
                     }
                 });
-        connect(bootstrap,HOST,PORT,MAX_RETRY);
+        connect(bootstrap, HOST, PORT, MAX_RETRY);
     }
 
     /**
@@ -70,6 +77,9 @@ public class NettyClient {
         bootstrap.connect(host, port).addListener(future -> {
             if (future.isSuccess()) {
                 System.out.println(new Date() + "：连接主机" + host + ":" + port + "成功！");
+                Channel channel = ((ChannelFuture) future).channel();
+                startConsoleThread(channel);
+
             } else if (retry == 0) {
                 System.out.println("重试次数已用完，放弃连接!");
             } else {
@@ -83,5 +93,20 @@ public class NettyClient {
             }
         });
 
+    }
+
+    private static void startConsoleThread(Channel channel) {
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if (LoginUtils.hasLogin(channel)) {
+                    System.out.println("已登录,输入消息发送至服务端: ");
+                    Scanner sc = new Scanner(System.in);
+                    String line = sc.nextLine();
+                    //封装请求消息包
+
+                    channel.writeAndFlush(new MessageRequestPacket(line));
+                }
+            }
+        }).start();
     }
 }
