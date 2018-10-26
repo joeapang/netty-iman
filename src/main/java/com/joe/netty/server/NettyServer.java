@@ -7,6 +7,7 @@ import com.joe.netty.server.handler.LoginRequestHandler;
 import com.joe.netty.server.handler.MessageRequestHandler;
 import com.joe.netty.util.PacketDecoder;
 import com.joe.netty.util.PacketEncoder;
+import com.joe.netty.util.Spliter;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -49,7 +50,7 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new PacketDecoder()).addLast(new LoginRequestHandler())
+                        ch.pipeline().addLast(new Spliter()).addLast(new PacketDecoder()).addLast(new LoginRequestHandler())
                                 .addLast(new MessageRequestHandler()).addLast(new PacketEncoder());
                     }
                 });

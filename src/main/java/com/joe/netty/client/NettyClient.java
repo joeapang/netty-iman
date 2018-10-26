@@ -10,6 +10,7 @@ import com.joe.netty.protocol.command.PacketCodeC;
 import com.joe.netty.util.LoginUtils;
 import com.joe.netty.util.PacketDecoder;
 import com.joe.netty.util.PacketEncoder;
+import com.joe.netty.util.Spliter;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
@@ -60,7 +61,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new PacketDecoder()).addLast(new LoginResponseHandler())
+                        ch.pipeline().addLast(new Spliter()).addLast(new PacketDecoder()).addLast(new LoginResponseHandler())
                                 .addLast(new MessageResponseHandler()).addLast(new PacketEncoder());
                     }
                 });
