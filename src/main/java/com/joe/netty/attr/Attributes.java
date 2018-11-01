@@ -3,6 +3,7 @@ package com.joe.netty.attr;/**
  * @date 2018/10/25/025
  */
 
+import com.joe.netty.session.Session;
 import io.netty.util.AttributeKey;
 
 /**
@@ -11,5 +12,7 @@ import io.netty.util.AttributeKey;
  * @date 2018/10/25/025
  */
 public interface Attributes {
-    AttributeKey<Boolean> login = AttributeKey.newInstance("login");
+    AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("LOGIN");
+    AttributeKey<Session> SESSION = AttributeKey.newInstance("session");
+
 }

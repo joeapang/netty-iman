@@ -14,9 +14,13 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class LoginResponsePacket extends  BasePacket{
+public class LoginResponsePacket extends BasePacket {
     private boolean isSuccess;
     private String reason;
+    private String userId;
+
+    private String userName;
+
     @Override
     public Byte command() {
         return Command.LOGIN_RESPONSE;
